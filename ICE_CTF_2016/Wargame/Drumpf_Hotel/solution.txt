@@ -1,0 +1,51 @@
+   cat solution.txt
+
+1. Book a suite
+2. Book a room
+3. Delete booking
+4. Print booking
+5. Quit
+$$$
+Name:
+Room number:
+Booked a room!
+
+1. Book a suite
+2. Book a room
+3. Delete booking
+4. Print booking
+5. Quit
+$$$
+Suite booking deleted!
+Room booking deleted!
+
+1. Book a suite
+2. Book a room
+3. Delete booking
+4. Print booking
+5. Quit
+$$$
+Name:
+Room number:
+Booked a room!
+
+1. Book a suite
+2. Book a room
+3. Delete booking
+4. Print booking
+5. Quit
+$$$
+IceCTF{they_can_take_our_overflows_but_they_will_never_take_our_use_after_freeeedom!}
+w▒S?j▒▒w▒ORooms number: 134905
+Name: AAAAAAAA
+Rooms number: 134514237
+
+1. Book a suite
+2. Book a room
+3. Delete booking
+4. Print booking
+5. Quit
+$$$
+[*] Closed connection to drumpf.vuln.icec.tf port 6502
+
+on a reecrit eip grace a la valeur du "numero de chambre" apres un use after-free (voir game.py)
