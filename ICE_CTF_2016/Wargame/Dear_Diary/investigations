@@ -1,0 +1,82 @@
+function add_entry {
+    var_C = *0x14;
+    printf("Tell me all your secrets: ");
+    eax = *stdout@@GLIBC_2.0;
+    fflush(eax);
+    eax = *stdin@@GLIBC_2.0;
+    fgets(arg0, 0x100, eax);
+    if (strchr(arg0, 0x6e) != 0x0) {
+            puts("rude!");
+            eax = exit(0x1);
+    }
+    else {
+            eax = var_C ^ *0x14;
+            COND = eax == 0x0;
+            if (!COND) {
+                    eax = __stack_chk_fail();
+            }
+    }
+    return eax;
+}
+
+function print_entry {
+    var_C = *0x14;
+    printf(arg0, stack[2038], stack[2039], stack[2040], stack[2041], stack[2042], stack[2043], stack[2044], stack[2045], stack[2046], stack[2047], arg0);
+    eax = *stdout@@GLIBC_2.0;
+    fflush(eax);
+    eax = var_C ^ *0x14;
+    COND = eax == 0x0;
+    if (!COND) {
+            eax = __stack_chk_fail();
+    }
+    return eax;
+}
+
+
+function main {
+    esp = (esp & 0xfffffff0) - 0x1420;
+    flag();
+    puts("-- Diary 3000 --");
+    eax = *stdout@@GLIBC_2.0;
+    fflush(eax);
+    goto loc_80487e1;
+
+loc_80487e1:
+    do {
+            print_menu();
+            eax = *stdin@@GLIBC_2.0;
+            fgets(esp + 0x1418, 0x4, eax);
+            stack[759] = esp + 0x1418;
+            eax = atoi(stack[759]);
+            if (eax != 0x2) {
+                break;
+            }
+            if (*(esp + 0x14) == 0x0) {
+                    puts("No entry found!");
+            }
+            else {
+                    print_entry((stack[759] + 0xffffffff << 0x8) + esp + 0x18);
+            }
+    } while (true);
+    if (eax == 0x3) goto loc_804888e;
+
+loc_804881f:
+
+//Format string , lire le flag en memoire
+
+
+[+] Opening connection to diary.vuln.icec.tf on port 6501: Done
+-- Diary 3000 --
+
+
+1. add entry
+2. print latest entry
+3. quit
+>
+Tell me all your secrets:
+
+1. add entry
+2. print latest entry
+3. quit
+>
+\xa0\xa0\x0IceCTF{this_thing_is_just_sitting_here}
